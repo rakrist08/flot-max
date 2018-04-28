@@ -157,13 +157,13 @@ app
             var matrice = [];
             //Création matrice carée
 
-            for(var i=0; i< force.nodes().length; i++){
+            force.nodes().forEach(function(){
                 var colzero = [];
-                for(var j=0; j< force.nodes().length; j++){
+            	force.nodes().forEach(function(){
                     colzero.push(0);
-                }
+                });
                 matrice.push(colzero);
-            }
+            });
             //Remplissage des liens entre les noeuds dans le matrice
             force.links().forEach(function(lien){
                var i = parseInt(lien.source.index),
