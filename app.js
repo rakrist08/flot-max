@@ -20,7 +20,8 @@ app
             var g = this;
             //Reconstruction de données
             var arcs = [];
-            donnees.links.forEach(function(link){
+            for(var i=0; i<donnees.links.length; i++){
+            	var link = donnees.links[i];
                 var src = donnees.nodes.filter(function(node){
                     return link.source === node.nom;
                 })[0], dest = donnees.nodes.filter(function(node){
@@ -32,8 +33,7 @@ app
                     flot: link.flot,
                     capacite: link.capacite
                 });
-            });
-
+            }
             force
                 .nodes(donnees.nodes)
                 .links(arcs);
@@ -156,33 +156,34 @@ app
         this.convertirEnMatrice = function(){
             var matrice = [];
             //Création matrice carée
-
-            force.nodes().forEach(function(){
+            for(var i=0; i<force.nodes().length; i++){
                 var colzero = [];
-            	force.nodes().forEach(function(){
+            	for(var j=0; j<force.nodes().length; j++){
                     colzero.push(0);
-                });
+                }
                 matrice.push(colzero);
-            });
+            }
             //Remplissage des liens entre les noeuds dans le matrice
-            force.links().forEach(function(lien){
+            for(var ind = 0, links = force.links(); ind < links.length; ind++){
+               var lien = links[ind];
                var i = parseInt(lien.source.index),
                    j = parseInt(lien.target.index);
 
                 matrice[i][j] = lien.capacite;
-            });
+            }
 
             return matrice;
         };
         this.calculerFlotMax = function(source, target){
             var matrice = this.convertirEnMatrice();
             var res = fordFulkerson(matrice, source, target); //definit dans scripts/flomax.js
-            force.links().forEach(function(lien, ind){
+            for(var ind = 0, links = force.links(); ind < links.length; ind++){
+            	var lien = links[ind];
                 var i = parseInt(lien.source.index),
                     j = parseInt(lien.target.index);
                 var flot = eval(lien.capacite - res.grapheresiduel[i][j]);
                 donnees.links[ind].flot = flot;
-            });
+            }
             this.traitements = res.traitements;
             return res.flotmax;
         };
