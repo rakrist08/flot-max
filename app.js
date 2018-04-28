@@ -87,7 +87,7 @@ app
                     .text(function(d) { return d.flot + ' / ' +d.capacite })
                     .on("click", function(d,i){
                         var capacite =  prompt("Capacité de transport : ", d.capacite);
-                        capacite = capacite == "" ? 0 : parseInt(capacite);
+                        capacite = (!capacite) ? d.capacite : (capacite == "" ? 0 : parseInt(capacite));
                         donnees.links[i].capacite = capacite;
                         g.update(); 
                     });
